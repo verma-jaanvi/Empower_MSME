@@ -1,0 +1,44 @@
+feat: production-grade EmpowerMSME platform — full financial ecosystem
+
+## New Features Added
+
+### Dashboards & Analytics
+- Analytics Dashboard (business + investor) with Recharts area/bar/pie charts
+- Loan Application Dashboard with animated lifecycle timeline and document upload
+- Repayment Dashboard with EMI tracking, balance trend charts, and payment alerts
+- Enhanced Admin/Business/User dashboards with Framer Motion animations and live charts
+
+### Financial Hub
+- Campaign Management: create/edit/delete campaigns with funding progress bars and engagement metrics
+- Revenue-Based Financing (RBF): interactive sliders, live repayment schedule chart, RBF vs EMI comparison
+- P2P Lending Circles: group management, trust scores, fund rotation history
+
+### AI Features
+- Credit Scoring Engine: transparent weighted linear algorithm (300-900 range) with full factor explainability
+- AI Knowledge Academy: RAG-style chatbot with comprehensive MSME government schemes knowledge base
+- AI Story Builder: generates 3 pitch variants — Professional, Emotional, and Data-Driven
+
+### Admin & Security
+- User Management + KYC: approve/reject workflow, animated profile scoring
+- Security Console: immutable audit logs, MFA toggle controls, live login activity tracker
+- Platform Analytics: user growth, loan volume, default rate trend, sector distribution
+
+### Backend Microservices (Next.js API Routes)
+- /api/credit/evaluate — Interpretable weighted credit scoring engine
+- /api/campaigns — CRUD campaign management with filtering
+- /api/loans — Loan lifecycle tracking
+- /api/repayments — EMI and RBF repayment data
+- /api/analytics — Platform metrics aggregation
+- /api/chat — Knowledge Academy query handler
+
+### Shared UI Components
+- AnimatedCard, StaggerContainer, FadeIn — Framer Motion wrappers
+- MetricCard — Animated spring-based KPI counter with trend indicators
+- CreditGauge — SVG semicircle gauge with color zones (300-900 scale)
+- RiskBadge — Contextual risk category badge
+
+### Navigation & Infrastructure
+- All 3 sidebars (business/admin/user) updated with grouped navigation to all new routes
+- framer-motion installed and integrated across all pages
+- 37 routes compile successfully with 0 build errors
+- MSME knowledge base covering MUDRA, PMEGP, GST, SIDBI, RBF, P2P lending
