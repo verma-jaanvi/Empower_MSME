@@ -1,15 +1,18 @@
 import "./globals.css"
 import { LanguageProvider } from "@/contexts/language-context"
+import { AuthProvider } from "@/lib/auth-context"
 import FloatingSpamCheck from "@/components/floating-spam-check"
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <LanguageProvider>
-          {children}
-          <FloatingSpamCheck />
-        </LanguageProvider>
+        <AuthProvider>
+          <LanguageProvider>
+            {children}
+            <FloatingSpamCheck />
+          </LanguageProvider>
+        </AuthProvider>
       </body>
     </html>
   )

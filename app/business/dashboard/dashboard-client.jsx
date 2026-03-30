@@ -2,8 +2,10 @@
 
 import { motion } from "framer-motion"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import BusinessSidebar from "@/components/business-sidebar"
-import GlobalFooter from "@/components/global-footer"
+import { useAuth } from "@/lib/auth-context"
+
 import { MetricCard } from "@/components/ui/metric-card"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -175,7 +177,6 @@ export default function DashboardClient() {
             </div>
           </div>
         </main>
-        <GlobalFooter />
       </div>
     </div>
   )
