@@ -1,0 +1,112 @@
+"use client"
+
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import Link from "next/link"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { authService, ROLES } from "@/lib/auth"
+import { AlertCircle } from "lucide-react"
+
+export default function BusinessRegisterPage() {
+  const router = useRouter()
+  const [formData, setFormData] = useState({
+    ownerName: "",
+    businessName: "",
+    email: "",
+    password: "",
+  })
+
+  const handleRegister = (e) => {
+    e.preventDefault()
+    authService.register(formData, ROLES.BUSINESS)
+    router.push("/business/pending")
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center">
+          <Link href="/" className="inline-flex items-center gap-2 justify-center mb-4">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground font-bold">
+              E
+            </div>
+            <span className="text-xl font-bold text-foreground">EmpowerMSME</span>
+          </Link>
+          <CardTitle className="text-2xl">Register Your Business</CardTitle>
+          <CardDescription>Create an MSME account to access funding</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Alert className="mb-4">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription className="text-sm">
+              Your account will require admin approval before you can access all features
+            </AlertDescription>
+          </Alert>
+
+          <form onSubmit={handleRegister} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="ownerName">Owner Name</Label>
+              <Input
+                id="ownerName"
+                placeholder="John Doe"
+                value={formData.ownerName}
+                onChange={(e) => setFormData({ ...formData, ownerName: e.target.value })}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="businessName">Business Name</Label>
+              <Input
+                id="businessName"
+                placeholder="My Business Pvt Ltd"
+                value={formData.businessName}
+                onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="email">Business Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="business@example.com"
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                required
+              />
+            </div>
+            <Button type="submit" className="w-full bg-accent hover:bg-accent/90">
+              Register Business
+            </Button>
+          </form>
+          <div className="mt-4 text-center text-sm">
+            <span className="text-muted-foreground">Already registered? </span>
+            <Link href="/auth/business/login" className="text-accent hover:underline">
+              Login
+            </Link>
+          </div>
+          <div className="mt-4 text-center">
+            <Link href="/auth/select" className="text-sm text-muted-foreground hover:text-primary">
+              ← Back to role selection
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
