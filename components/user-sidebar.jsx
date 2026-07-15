@@ -1,9 +1,10 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import LanguageSelector from "@/components/language-selector"
+import { useAuth } from "@/lib/auth-context"
 import {
   LayoutDashboard, Building2, FileText, GraduationCap,
   MessageSquare, User, Settings, LogOut, TrendingUp, BarChart3,
@@ -11,6 +12,8 @@ import {
 
 export default function UserSidebar() {
   const pathname = usePathname()
+  const router = useRouter()
+  const { logout } = useAuth()
 
   const groups = [
     {
@@ -73,9 +76,10 @@ export default function UserSidebar() {
 
       <div className="border-t border-sidebar-border p-3 space-y-2 flex-shrink-0">
         <div className="px-3 py-1"><LanguageSelector /></div>
-        <Link href="/" className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors">
+        <button onClick={() => { logout(); router.push("/") }}
+          className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors">
           <LogOut className="h-4 w-4" /> Logout
-        </Link>
+        </button>
       </div>
     </div>
   )
