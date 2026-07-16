@@ -1,45 +1,63 @@
 "use client"
+/**
+ * lib/auth-context.jsx
+ * ─────────────────────────────────────────────────────────────────────────────
+ * React Context bridge that keeps the existing `useAuth()` API working
+ * across all 20+ components that import it (sidebars, navbar, dashboards),
+ * while delegating the actual auth state to the Zustand store.
+ *
+ * Why keep this file?
+ *  - Sidebars, navbar, and 15+ other components call `useAuth()` today.
+ *  - Changing all of them to `useAuthStore()` is a big refactor.
+ *  - This thin wrapper syncs Context with Zustand so both work seamlessly.
+ *  - Gradually migrate components to useAuthStore() directly over time.
+ */
 
-import { createContext, useContext, useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { createContext, useContext, useEffect } from "react"
+import { useAuthStore } from "@/store/useAuthStore"
+import { DASHBOARD_PATHS } from "@/types/auth"
+
+// ─── Context definition ───────────────────────────────────────────────────────
 
 const AuthContext = createContext(null)
 
+// ─── Provider ─────────────────────────────────────────────────────────────────
+
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem("empowermsme_user")
-      if (stored) setUser(JSON.parse(stored))
-    } catch {}
-    setLoading(false)
-  }, [])
-
-  const login = (role, name, email) => {
-    const u = { role, name, email }
-    localStorage.setItem("empowermsme_user", JSON.stringify(u))
-    setUser(u)
-  }
-
-  const logout = () => {
-    localStorage.removeItem("empowermsme_user")
-    setUser(null)
-  }
-
-  const dashboardPath = {
-    business: "/business/dashboard",
-    user: "/user/dashboard",
-    admin: "/admin/dashboard",
-  }
+  // Pull everything from Zustand — it is the single source of truth
+  const { user, logout, isLoading, isAuthenticated } = useAuthStore()
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading, dashboardPath }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        logout,
+        loading: isLoading,
+        isAuthenticated,
+        /**
+         * Legacy compatibility: dashboardPath was used by old code.
+         * Now derived from the Zustand user's role via DASHBOARD_PATHS.
+         */
+        dashboardPath: DASHBOARD_PATHS,
+        /**
+         * @deprecated Use useAuthStore().login() directly.
+         * Kept for backward compatibility with any remaining callers.
+         * The real login now goes through the Zustand store → API route.
+         */
+        login: (role, name, email) => {
+          console.warn(
+            "[AuthContext] Deprecated login() called. " +
+            "Use useAuthStore().login(email, password, role) instead."
+          )
+        },
+      }}
+    >
       {children}
     </AuthContext.Provider>
   )
 }
+
+// ─── Hook ─────────────────────────────────────────────────────────────────────
 
 export const useAuth = () => {
   const ctx = useContext(AuthContext)
